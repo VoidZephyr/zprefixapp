@@ -4,6 +4,9 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.json());
 //https://stackoverflow.com/questions/18864677/what-is-process-env-port-in-node-js
