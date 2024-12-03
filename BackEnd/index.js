@@ -23,7 +23,7 @@ app.get('/items', function (req, res) {
 //https://www.geeksforgeeks.org/express-js-app-post-function/
 
   app.post('/items', (req, res) => {
-        const {itemName, description, quantity};
+        const {itemName, description, quantity} = req.body;
     const id = items.length + 1;
     const newItem = {id, itemName, description, quantity};
 
