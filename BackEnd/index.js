@@ -20,9 +20,17 @@ app.get('/items', function (req, res) {
   });
 
 
+//https://www.geeksforgeeks.org/express-js-app-post-function/
 
+  app.post('/items', (req, res) => {
+        const {itemName, description, quantity};
+    const id = items.length + 1;
+    const newItem = {id, itemName, description, quantity};
 
-
+    items.push(newItem)
+    //https://stackoverflow.com/questions/49863783/express-res-status200-json-only-sending-json-message-how-to-retrieve-sta
+    res.status(201).json({message: "Successfully Registered", status: 201})
+    })
 
 
 
