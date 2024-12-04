@@ -18,8 +18,8 @@ const Login = ({onLogin}) => {
             return res.json();
         })
         .then(({ token }) => {
-            localStorage.setItem('token', token); // Save token to localStorage
-            onLogin(); // Notify parent component
+            localStorage.setItem('token', token);
+            onLogin();
         })
         .catch((err) => setError(err.message));
     };
