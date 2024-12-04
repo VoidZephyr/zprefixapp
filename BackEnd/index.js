@@ -79,12 +79,16 @@ app.delete('/items/:id', async (req, res) => {
   const {id} = req.params;
   try{
     const deleted = await knex('items').where({id}).del();
-    res.json({message: "deleted"});
-  }catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to fetch items' });
+    if (deleted) {
+      res.json({ message: 'Item deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Item not found' });
+    }
+  } catch (err) {
+    console.error('Error deleting item:', err);
+    res.status(500).json({ error: 'Failed to delete item' });
   }
-})
+});
 
 
 const PORT = process.env.PORT || 5000;

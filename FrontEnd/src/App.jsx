@@ -45,6 +45,22 @@ const handleUpdate = (e) => {
     .catch((err) => console.error('Error updating item:', err));
 };
 
+const handleDelete = (id) => {
+  fetch(`http://localhost:5000/items/${id}`, {
+    method: 'DELETE',
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error('Failed to delete item');
+    }
+    return res.json();
+  })
+  .then(() => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id)); // Update state
+  })
+  .catch((err) => console.error('Error deleting item:', err));
+};
+
 return (
   <div>
     <h1>Inventory Website SupraCoders</h1>
@@ -82,6 +98,7 @@ return (
               <li key={item.id}>
                 {item.name} - {item.description} - (Quantity: {item.quantity})
                 <button onClick={() => handleEdit(item)}>Edit</button>
+                <button onClick={() => handleDelete(item.id)}>Delete</button>
               </li>
             ))
           ) : (
