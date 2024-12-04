@@ -10,8 +10,6 @@ const knex = require('knex')(require('./knexfile').development);
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secret = "1234";
-
-
 app.use(cors());
 
 app.use(express.json());
@@ -23,6 +21,15 @@ const items = [
 {id : 1, itemName: 'Item1', description: "blablabal", quantity: 22 },
 {id : 2, itemName: 'Item2', description: "asdfasdfasdfa", quantity: 3}
 ]
+
+const authenticationToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]:
+  
+}
+
+
+
 //https://expressjs.com/en/guide/routing.html
 app.get('/items', async (req, res) => {
   try {
