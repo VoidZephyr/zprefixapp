@@ -5,6 +5,8 @@ import './App.css'
 const App = () => {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
+  const [editingItem, setEditingItem] = useState(null);
+
 
   useEffect(() => {
   fetch('http://localhost:5000/items')
@@ -19,6 +21,11 @@ const handleItemAdded = (newItem) => {
   setItems ((prevItems) => [...prevItems, newItem]);
 };
 
+const handleEdit = (item) => {
+  setEditingItem(item);
+};
+
+
   return (
     <div>
       <h1>Inventory Website SupraCoders</h1>
@@ -29,6 +36,7 @@ const handleItemAdded = (newItem) => {
           items.map((item) => (
             <li key={item.id}>
               {item.name} - {item.description} - (Quantity: {item.quantity})
+              <button onClick={() => handleEdit(item)}>Edit</button>
             </li>
           ))
         ) : (

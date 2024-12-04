@@ -49,18 +49,31 @@ app.get('/items', async (req, res) => {
     }
   })
 
-app.put('/items/:id', async (req,res) => {
-const {id} = req.params;
-const {itemName, description, quantity } = req.body;
-try {
-  const updated = await knex ('items')
-  .where ({id})
-  .update ({itemName, description, quantity})
-  .returning('*');
-}catch (err) {
-  console.error(err);
-  res.status(500).json({ error: 'Failed to fetch items' });
-}});
+  app.put('/items/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, description, quantity } = req.body;
+  
+    try {
+      console.log('Updating item with ID:', id); // Debug log
+      const updated = await knex('items')
+        .where({ id })
+        .update(
+          { name, description, quantity },
+          ['id', 'name', 'description', 'quantity']
+        );
+  
+      console.log('Query result:', updated); // Debug log
+      if (!updated.length) {
+        return res.status(404).json({ error: 'Item not found' });
+      }
+  
+      res.json(updated[0]);
+    } catch (err) {
+      console.error('Error updating item:', err);
+      res.status(500).json({ error: 'Failed to update item' });
+    }
+  });
+  
 
 app.delete('/items/:id', async (req, res) => {
   const {id} = req.params;
