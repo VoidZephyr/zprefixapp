@@ -13,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
   if (isLoggedIn){
-    fetch('http://localhost:5000/items'{
+    fetch('http://localhost:5000/items', {
   headers: {
     Authorization: `Bearer ${token}`,
   },

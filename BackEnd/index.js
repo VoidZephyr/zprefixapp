@@ -24,14 +24,24 @@ const items = [
 
 const authenticationToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]:
-  
-}
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) {
+    return res.status(401).json({ error: 'Access denied, token missing' });
+  }
+
+  jwt.verify(token, secret, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Invalid token' });
+    }
+    req.user = user; // Attach user info to the request
+    next();
+  });
+};
 
 
 
 //https://expressjs.com/en/guide/routing.html
-app.get('/items', async (req, res) => {
+app.get('/items', authenticationToken, async (req, res) => {
   try {
     const items = await knex('items').select('*');
     res.json(items);
@@ -79,11 +89,11 @@ app.post('/login', async (req, res) => {
 
 //https://www.geeksforgeeks.org/express-js-app-post-function/
 //https://www.w3schools.com/java/java_try_catch.asp
-  app.post('/items', async (req, res) => {
+  app.post('/items', authenticationToken, async (req, res) => {
       const {name, description, quantity, user_id} = req.body;
       try {
     const [newItem] = await knex('items')
-    .insert({name, description, quantity, user_id})
+    .insert({name, description, quantity, user_id: req.user.userId})
     .returning('*');
     res.status(201).json(newItem);
     }catch (err) {
