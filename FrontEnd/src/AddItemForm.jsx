@@ -29,8 +29,8 @@ const AddItemForm =({onItemAdded}) => {
             return res.json();
         })
         .then((newItem) => {
-            onItemAdded(newItem); // Notify parent about the new item
-            setFormData({ name: '', description: '', quantity: 0, user_id: 1 }); // Reset form
+            onItemAdded(newItem);
+            setFormData({ name: '', description: '', quantity: 0, user_id: 1 });
         })
         .catch((err) => console.error('Error adding item:', err));
     };
