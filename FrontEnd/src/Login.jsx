@@ -25,8 +25,12 @@ const Login = ({onLogin}) => {
     };
 return (
 <form onSubmit={handleSubmit}>
-<input  type="text" placeholder='Name' value={formData.name} onChange={(e)=> setFormData({...formData, name: e.target.value})} required/>
-<input type="text" placeholder='Description' value={formData.description} onChange={(e)=> setFormData({...formData, description: e.target.value})} required/>
+    <h2>Login</h2>
+<input  type="text" placeholder='Username' value={formData.username} onChange={(e)=> setFormData({...formData, username: e.target.value})} required/>
+<input type="text" placeholder='password' value={formData.password} onChange={(e)=> setFormData({...formData, password: e.target.value})} required/>
+<button type = "submit">Login</button>
 </form>
 )
 };
+
+export default Login;
