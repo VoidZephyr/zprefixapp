@@ -35,13 +35,15 @@ const AddItemForm =({onItemAdded}) => {
         .catch((err) => console.error('Error adding item:', err));
     };
 
-
-<form>
-    <input>name</input>
-    <input>description</input>
-    <input>quantity</input>
+return (
+<form onSubmit ={handleSubmit}>
+    <h2>New Item</h2>
+    <input  type="text" placeholder='Name' value={formData.name} onChange={(e)=> setFormData({...formData, name: e.target.value})} required/>
+    <input type="text" placeholder='Description' value={formData.description} onChange={(e)=> setFormData({...formData, description: e.target.value})} required/>
+    <input type="number" placeholder='Quantity' value={formData.quantity} onChange={(e)=> setFormData({...formData, quantity: parseInt(e.target.value, 10)})} required/>
     <button type="submit">Add Item</button>
 </form>
-
+);
+};
 
 export default AddItemForm;

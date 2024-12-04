@@ -4,7 +4,7 @@ import './App.css'
 
 const App = () => {
   const [items, setItems] = useState([]);
-
+  const [error, setError] = useState(null);
 
   useEffect(() => {
   fetch('http://localhost:5000/items')
@@ -15,6 +15,10 @@ const App = () => {
 
   // useEffect(() => {   https://dev.to/antdp425/react-fetch-data-from-api-with-useeffect-27le
   
+const handleItemAdded = (newItem) => {
+  setItems ((prevItems) => [...prevItems, newItem]);
+};
+
   return (
     <div>
       <h1>Inventory Website SupraCoders</h1>
