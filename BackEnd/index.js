@@ -49,6 +49,27 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await knex('users').where({ username }).first();
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ userId: user.id }, secret, { expiresIn: '1h' }); // Generate a token
+    res.json({ token });
+  } catch (err) {
+    console.error('Error logging in:', err);
+    res.status(500).json({ error: 'Failed to log in' });
+  }
+});
+
 //https://www.geeksforgeeks.org/express-js-app-post-function/
 //https://www.w3schools.com/java/java_try_catch.asp
   app.post('/items', async (req, res) => {
