@@ -9,7 +9,7 @@ const cors = require('cors');
 const knex = require('knex')(require('./knexfile').development);
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const secret = "1234";
+const secret = "your_secret_key";
 app.use(cors());
 
 app.use(express.json());

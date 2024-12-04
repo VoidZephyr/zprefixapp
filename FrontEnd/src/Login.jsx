@@ -19,7 +19,7 @@ const Login = ({onLogin}) => {
         })
         .then(({ token }) => {
             localStorage.setItem('token', token);
-            onLogin();
+            onLogin(token);
         })
         .catch((err) => setError(err.message));
     };
