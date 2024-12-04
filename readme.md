@@ -19,3 +19,7 @@ npm run dev //to run it.
 Api read.me replace the development details entry in the knex file with your database connection details... needs to be a postgres database
 sudo service postgresql start
 sudo -u postgres psql
+
+
+npm install jsonwebtoken bcrypt //authentication section
+

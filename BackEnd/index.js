@@ -7,6 +7,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 const cors = require('cors');
 const knex = require('knex')(require('./knexfile').development);
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secret = "1234";
 
 
 app.use(cors());
@@ -32,10 +35,22 @@ app.get('/items', async (req, res) => {
 });
 
 
+
+//username and password hashing
+app.post('/register', async (req, res) => {
+  const {username, password} = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10); 
+    const [newUser] = await knex('users').insert({ username, password: hashedPassword }).returning('*');
+    res.status(201).json(newUser);
+  } catch (err) {
+    console.error('Error registering user:', err);
+    res.status(500).json({ error: 'Failed to register user' });
+  }
+});
+
 //https://www.geeksforgeeks.org/express-js-app-post-function/
 //https://www.w3schools.com/java/java_try_catch.asp
-
-
   app.post('/items', async (req, res) => {
       const {name, description, quantity, user_id} = req.body;
       try {
