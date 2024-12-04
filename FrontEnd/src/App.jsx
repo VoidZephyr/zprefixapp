@@ -22,6 +22,7 @@ const handleItemAdded = (newItem) => {
   return (
     <div>
       <h1>Inventory Website SupraCoders</h1>
+      <AddItemForm onItemAdded={handleItemAdded} />
       <h2>Items</h2>
       <ul>
         {items.length > 0 ? (
