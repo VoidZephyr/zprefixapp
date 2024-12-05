@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import AddItemForm from "./AddItemForm";
 import Login from "./Login";
@@ -12,6 +12,7 @@ const App = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -25,7 +26,7 @@ const App = () => {
         .then((data) => setItems(data))
         .catch((err) => console.error("Error fetching items:", err));
     }
-  }, [isLoggedIn, token]);
+  }, [isLoggedIn]);
 
   const handleItemAdded = (newItem) => {
     setItems((prevItems) => [...prevItems, newItem]);
@@ -69,11 +70,13 @@ const App = () => {
     setIsLoggedIn(true);
     setToken(token);
     localStorage.setItem("token", token);
+    navigate("/"); // Redirect to home after login
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    navigate("/login"); // Redirect to login after logout
   };
 
   const truncateDescription = (desc) =>
@@ -82,22 +85,27 @@ const App = () => {
   return (
     <div>
       <h1>Inventory Website SupraCoders</h1>
-      {!isLoggedIn && <button onClick={() => navigate("/register")}>Register</button>}
-      {isLoggedIn && <button onClick={handleLogout}>Logout</button>}
+      {!isLoggedIn ? (
+        <button onClick={() => navigate("/register")}>Register</button>
+      ) : (
+        <button onClick={handleLogout}>Logout</button>
+      )}
+
       <Routes>
         {!isLoggedIn ? (
           <>
-            <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/" element={<PublicView />} />
             <Route path="/public-items/:id" element={<PublicItemDetail />} />
+            <Route path="*" element={<Navigate to="/login" />} />
           </>
         ) : (
           <>
             <Route
               path="/"
               element={
-                <>
+                <div>
                   <AddItemForm onItemAdded={handleItemAdded} />
                   {editingItem ? (
                     <form onSubmit={handleUpdate}>
@@ -156,9 +164,10 @@ const App = () => {
                       </ul>
                     </>
                   )}
-                </>
+                </div>
               }
             />
+            <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
       </Routes>
