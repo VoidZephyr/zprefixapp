@@ -92,6 +92,12 @@ const handleLogin =(token) => {
 
 console.log("Is Logged In:", isLoggedIn);
 
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  setIsLoggedIn(false);
+};
+
+
 const truncateDescription = (desc) =>
     desc.length > 100 ? desc.substring(0,100) + '...' : desc;
 
@@ -115,6 +121,7 @@ return (
               path="/"
               element={
                 <>
+                  <button onClick={handleLogout}>Logout</button>
                   <AddItemForm onItemAdded={handleItemAdded} />
                   {editingItem ? (
                     <form onSubmit={handleUpdate}>
