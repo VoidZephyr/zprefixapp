@@ -86,7 +86,10 @@ const App = () => {
     <div>
       <h1>Inventory Website SupraCoders</h1>
       {!isLoggedIn ? (
+        <div>
+        <button onClick={() => navigate("/login")}>Login</button>
         <button onClick={() => navigate("/register")}>Register</button>
+        </div>
       ) : (
         <button onClick={handleLogout}>Logout</button>
       )}
