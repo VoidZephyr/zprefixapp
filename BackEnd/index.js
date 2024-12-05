@@ -26,11 +26,13 @@ const authenticationToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
+    console.error('No token provided'); // Debug log
     return res.status(401).json({ error: 'Access denied, token missing' });
   }
 
   jwt.verify(token, secret, (err, user) => {
     if (err) {
+      console.error('Invalid token:', err.message); // Debug log
       return res.status(403).json({ error: 'Invalid token' });
     }
     req.user = user; // Attach user info to the request
@@ -43,7 +45,7 @@ const authenticationToken = (req, res, next) => {
 //https://expressjs.com/en/guide/routing.html
 app.get('/items', authenticationToken, async (req, res) => {
   try {
-    const items = await knex('items').select('*');
+    const items = await knex('items').where({ user_id: req.user.userId });
     res.json(items);
   } catch (err) {
     console.error(err);

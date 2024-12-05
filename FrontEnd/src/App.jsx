@@ -1,8 +1,8 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import AddItemForm from './AddItemForm';
 import Login from './Login';
 import './App.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PublicView from './PublicView';
 import PublicItemDetail from './PublicItemDetail';
 
@@ -16,6 +16,7 @@ const App = () => {
 
   useEffect(() => {
   if (isLoggedIn){
+    const token = localStorage.getItem('token');
     fetch('http://localhost:5000/items', {
   headers: {
     Authorization: `Bearer ${token}`,
@@ -81,11 +82,15 @@ const handleDelete = (id) => {
   .catch((err) => console.error('Error deleting item:', err));
 };
 
-const handleLogin =() => {
+const handleLogin =(token) => {
   setIsLoggedIn(true);
   setToken(userToken);
-  localStorage.setItem('token', userToken);
+  localStorage.setItem('token', token);
+
+  console.log('Login successful, token received:', token); // Debug log
 };
+
+console.log("Is Logged In:", isLoggedIn);
 
 const truncateDescription = (desc) =>
     desc.length > 100 ? desc.substring(0,100) + '...' : desc;
@@ -98,13 +103,14 @@ return (
         {!isLoggedIn ? (
           <>
             {/* Public Routes */}
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/" element={<PublicView />} />
             <Route path="/public-items/:id" element={<PublicItemDetail />} />
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
           </>
         ) : (
           <>
             {/* Logged-in User Routes */}
+            <Route path="/login" element={<Navigate to="/" />} />
             <Route
               path="/"
               element={

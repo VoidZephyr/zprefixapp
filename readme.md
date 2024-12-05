@@ -23,3 +23,5 @@ sudo -u postgres psql
 
 npm install jsonwebtoken bcrypt //authentication section
 
+npm install react-router-dom
+
