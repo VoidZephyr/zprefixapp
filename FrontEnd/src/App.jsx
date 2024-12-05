@@ -26,9 +26,17 @@ const App = () => {
 
   // useEffect(() => {   https://dev.to/antdp425/react-fetch-data-from-api-with-useeffect-27le
   
-const handleItemAdded = (newItem) => {
-  setItems ((prevItems) => [...prevItems, newItem]);
-};
+  const handleItemAdded = (newItem) => {
+    setItems((prevItems) => {
+      console.log('Previous items:', prevItems);
+      if (!Array.isArray(prevItems)) {
+        console.error('prevItems is not an array!');
+        return [newItem];
+      }
+      return [...prevItems, newItem];
+    });
+  };
+  
 
 const handleEdit = (item) => {
   setEditingItem(item);
@@ -42,14 +50,14 @@ const handleUpdate = (e) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(editingItem), // Fixed the misplaced parentheses
+    body: JSON.stringify(editingItem),
   })
     .then((res) => res.json())
     .then((updatedItem) => {
       setItems((prevItems) =>
         prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
       );
-      setEditingItem(null); // Reset the editing state
+      setEditingItem(null);
     })
     .catch((err) => console.error('Error updating item:', err));
 };
@@ -65,7 +73,7 @@ const handleDelete = (id) => {
     return res.json();
   })
   .then(() => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id)); // Update state
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   })
   .catch((err) => console.error('Error deleting item:', err));
 };
@@ -75,6 +83,9 @@ const handleLogin =() => {
   setToken(userToken);
   localStorage.setItem('token', userToken);
 };
+
+const truncateDescription = (desc) =>
+    desc.length > 100 ? desc.substring(0,100) + '...' : desc;
 
 return (
   <div>
@@ -126,7 +137,7 @@ return (
               {items.length > 0 ? (
                 items.map((item) => (
                   <li key={item.id}>
-                    {item.name} - {item.description} - (Quantity: {item.quantity})
+                    {item.name} - {truncateDescription(item.description)} - (Quantity: {item.quantity})
                     <button onClick={() => handleEdit(item)}>Edit</button>
                     <button onClick={() => handleDelete(item.id)}>Delete</button>
                   </li>

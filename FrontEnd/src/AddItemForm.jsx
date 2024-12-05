@@ -10,6 +10,9 @@ const AddItemForm =({onItemAdded}) => {
         }
     );
 
+
+    const token = localStorage.getItem('token');
+
     //according to the internet this is better than using onclick event for react app
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -19,6 +22,7 @@ const AddItemForm =({onItemAdded}) => {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
         body: JSON.stringify(formData),
         })
