@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import AddItemForm from './AddItemForm';
 import Login from './Login';
 import './App.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import PublicView from './PublicView';
+import PublicItemDetail from './PublicItemDetail';
 
 const App = () => {
   const [items, setItems] = useState([]);
@@ -88,69 +91,91 @@ const truncateDescription = (desc) =>
     desc.length > 100 ? desc.substring(0,100) + '...' : desc;
 
 return (
-  <div>
-    <h1>Inventory Website SupraCoders</h1>
-    {!isLoggedIn ? (
-      <Login onLogin={handleLogin} />
-    ) : (
-      <>
-        <AddItemForm onItemAdded={handleItemAdded} />
-        {editingItem ? (
-          <form onSubmit={handleUpdate}>
-            <h2>Edit Item</h2>
-            <input
-              type="text"
-              value={editingItem.name}
-              onChange={(e) =>
-                setEditingItem({ ...editingItem, name: e.target.value })
-              }
-              required
-            />
-            <input
-              type="text"
-              value={editingItem.description}
-              onChange={(e) =>
-                setEditingItem({ ...editingItem, description: e.target.value })
-              }
-              required
-            />
-            <input
-              type="number"
-              value={editingItem.quantity}
-              onChange={(e) =>
-                setEditingItem({
-                  ...editingItem,
-                  quantity: parseInt(e.target.value, 10),
-                })
-              }
-              required
-            />
-            <button type="submit">Update</button>
-            <button type="button" onClick={() => setEditingItem(null)}>
-              Cancel
-            </button>
-          </form>
+  <Router>
+    <div>
+      <h1>Inventory Website SupraCoders</h1>
+      <Routes>
+        {!isLoggedIn ? (
+          <>
+            {/* Public Routes */}
+            <Route path="/" element={<PublicView />} />
+            <Route path="/public-items/:id" element={<PublicItemDetail />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          </>
         ) : (
           <>
-            <h2>Items</h2>
-            <ul>
-              {items.length > 0 ? (
-                items.map((item) => (
-                  <li key={item.id}>
-                    {item.name} - {truncateDescription(item.description)} - (Quantity: {item.quantity})
-                    <button onClick={() => handleEdit(item)}>Edit</button>
-                    <button onClick={() => handleDelete(item.id)}>Delete</button>
-                  </li>
-                ))
-              ) : (
-                <li>No items available.</li>
-              )}
-            </ul>
+            {/* Logged-in User Routes */}
+            <Route
+              path="/"
+              element={
+                <>
+                  <AddItemForm onItemAdded={handleItemAdded} />
+                  {editingItem ? (
+                    <form onSubmit={handleUpdate}>
+                      <h2>Edit Item</h2>
+                      <input
+                        type="text"
+                        value={editingItem.name}
+                        onChange={(e) =>
+                          setEditingItem({ ...editingItem, name: e.target.value })
+                        }
+                        required
+                      />
+                      <input
+                        type="text"
+                        value={editingItem.description}
+                        onChange={(e) =>
+                          setEditingItem({
+                            ...editingItem,
+                            description: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <input
+                        type="number"
+                        value={editingItem.quantity}
+                        onChange={(e) =>
+                          setEditingItem({
+                            ...editingItem,
+                            quantity: parseInt(e.target.value, 10),
+                          })
+                        }
+                        required
+                      />
+                      <button type="submit">Update</button>
+                      <button type="button" onClick={() => setEditingItem(null)}>
+                        Cancel
+                      </button>
+                    </form>
+                  ) : (
+                    <>
+                      <h2>Items</h2>
+                      <ul>
+                        {items.length > 0 ? (
+                          items.map((item) => (
+                            <li key={item.id}>
+                              {item.name} -{' '}
+                              {truncateDescription(item.description)} - (Quantity:{' '}
+                              {item.quantity})
+                              <button onClick={() => handleEdit(item)}>Edit</button>
+                              <button onClick={() => handleDelete(item.id)}>Delete</button>
+                            </li>
+                          ))
+                        ) : (
+                          <li>No items available.</li>
+                        )}
+                      </ul>
+                    </>
+                  )}
+                </>
+              }
+            />
           </>
         )}
-      </>
-    )}
-  </div>
+      </Routes>
+    </div>
+  </Router>
 );
 }
 
