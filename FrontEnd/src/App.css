@@ -1,8 +1,16 @@
+body {
+  background-image: url('/src/assets/store.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: tan;
 }
 
 .logo {

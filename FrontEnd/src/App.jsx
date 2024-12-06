@@ -70,13 +70,13 @@ const App = () => {
     setIsLoggedIn(true);
     setToken(token);
     localStorage.setItem("token", token);
-    navigate("/"); // Redirect to home after login
+    navigate("/");
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    navigate("/login"); // Redirect to login after logout
+    navigate("/login");
   };
 
   const truncateDescription = (desc) =>
@@ -84,7 +84,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Inventory Website SupraCoders</h1>
+      <h1>Cool Guy Inventory Website</h1>
       {!isLoggedIn ? (
         <div>
         <button onClick={() => navigate("/login")}>Login</button>

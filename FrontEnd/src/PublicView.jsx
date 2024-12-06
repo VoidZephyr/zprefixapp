@@ -11,13 +11,16 @@ useEffect(() => {
     .catch((err) => setError('Failed to load public items.'));
 }, []);
 
+const truncateDescription = (desc) =>
+    desc.length > 100 ? desc.substring(0, 100) + "..." : desc;
+
 return (
     <div>
     <h1>Public Items</h1>
     <ul>
         {items.map((item) => (
         <li key={item.id}>
-            {item.name} - {item.description} - (Quantity: {item.quantity})
+            {item.name} - {truncateDescription(item.description)} - (Quantity: {item.quantity})
             <button
             onClick={() => window.location.href = `/public-items/${item.id}`}
             >
