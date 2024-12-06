@@ -12,16 +12,13 @@ useEffect(() => {
     .catch((err) => setError('Failed to load item details.'));
 }, [id]);
 
-const truncateDescription = (desc) =>
-    desc.length > 100 ? desc.substring(0, 100) + "..." : desc;
-
 return (
     <div>
     <h1>Item Details</h1>
     {item ? (
         <div>
         <h2>{item.name}</h2>
-        <p>{truncateDescription(item.description)}</p>
+        <p>{item.description}</p>
         <p>Quantity: {item.quantity}</p>
         </div>
     ) : (
